@@ -11,6 +11,7 @@
 # include <unistd.h>
 # include <math.h>
 # include <stdbool.h>
+# include <unistd.h>
 
 /* Typedef */
 typedef struct s_sound	t_sound;
