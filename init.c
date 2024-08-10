@@ -18,6 +18,7 @@ void	init_sound(t_sound *sound, char *filename)
 		sound->volume = 1.0;
 		sound->thread = 0;
 		sound->end = false;
+		sound->pause = false;
 		if (pthread_mutex_init(&sound->mutex, NULL) != 0)
 			return (perror("pthread_mutex_init() error"), (void)0);
 	}

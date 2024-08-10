@@ -3,6 +3,8 @@
 
 # define ADD 1
 # define STOP 2
+# define PAUSE 3
+# define RESUME 4
 
 # include <ao/ao.h>
 # include <mpg123.h>
@@ -30,6 +32,7 @@ struct							s_sound
 	int							driver;
 	ao_device					*dev;
 	bool						end;
+	bool						pause;
 	pthread_mutex_t				mutex;
 };
 
@@ -51,7 +54,13 @@ void	destroy_ao(void);
 void	init_sound(t_sound *sound, char *filename);
 bool	set_sound_end(t_sound *sound);
 bool	end_sound(t_sound *sound);
+bool	set_sound_pause(t_sound *sound);
+bool	pause_sound(t_sound *sound);
+bool	set_sound_resume(t_sound *sound);
+t_list	*resume_sound(t_list **p_head, t_sound *sound);
 t_list	*stop_sound(t_list **p_head, t_sound *sound);
 t_list	*add_sound(t_list **p_head, t_sound *sound);
+t_list	*halt_sound(t_list **p_head, t_sound *sound);
+void	output_sound(t_sound *sound);
 
 #endif /* MAIN_H */

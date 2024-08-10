@@ -36,6 +36,10 @@ t_list	*running_sounds(int action, t_sound *sound)
 		return (add_sound(&head, sound));
 	else if (action == STOP)
 		return (stop_sound(&head, sound));
+	else if (action == PAUSE)
+		return (halt_sound(&head, sound));
+	else if (action == RESUME)
+		return (resume_sound(&head, sound));
 	else
 		return (fprintf(stderr, "Invalid action! valid => ADD / STOP"), NULL);
 }

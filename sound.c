@@ -49,6 +49,15 @@ void	cleanup(t_sound *sound)
 	mpg123_exit();
 }
 
+void	output_sound(t_sound *sound)
+{
+	while (mpg123_read(sound->mh, sound->buffer, sound->buffer_size, &sound->done) \
+			== MPG123_OK && !end_sound(sound) && !pause_sound(sound))
+		ao_play(sound->dev, (char *)sound->buffer, sound->done);
+	if (!pause_sound(sound))
+		cleanup(sound);
+}
+
 void	*play_mp3(void *arg)
 {
 	t_sound	*sound;
@@ -66,9 +75,6 @@ void	*play_mp3(void *arg)
 		return (NULL);
 	if (mpg123_volume(sound->mh, 0.1) != MPG123_OK)
 		return (perror("mpg123_volume() failure"), NULL);
-	while (mpg123_read(sound->mh, sound->buffer, sound->buffer_size, &sound->done) \
-			== MPG123_OK && sound->end == false)
-		ao_play(sound->dev, (char *)sound->buffer, sound->done);
-	cleanup(sound);
+	output_sound(sound);
 	return (NULL);
 }
