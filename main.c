@@ -19,7 +19,11 @@ int main(int ac, char **av)
 			sleep(1);
 			printf("resume\n");
 			running_sounds(RESUME, sound);
-			sleep(3);
+			sleep(1);
+			printf("vol down\n");
+			sound->volume = 1.0;
+			running_sounds(CHANGE_VOLUME, sound);
+			sleep(2);
 			printf("ending...\n");
 			running_sounds(STOP, sound);
 		}

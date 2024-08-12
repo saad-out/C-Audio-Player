@@ -5,6 +5,7 @@
 # define STOP 2
 # define PAUSE 3
 # define RESUME 4
+# define CHANGE_VOLUME 5
 
 # include <ao/ao.h>
 # include <mpg123.h>
@@ -33,6 +34,8 @@ struct							s_sound
 	ao_device					*dev;
 	bool						end;
 	bool						pause;
+	bool						volume_changed;
+	bool						init;
 	pthread_mutex_t				mutex;
 };
 
@@ -62,5 +65,10 @@ t_list	*stop_sound(t_list **p_head, t_sound *sound);
 t_list	*add_sound(t_list **p_head, t_sound *sound);
 t_list	*halt_sound(t_list **p_head, t_sound *sound);
 void	output_sound(t_sound *sound);
+bool	set_volume_unchanged(t_sound *sound);
+bool	set_volume_changed(t_sound *sound);
+bool	sound_volume_changed(t_sound *sound);
+bool	set_volume_value(t_sound *sound, double value);
+t_list	*change_sound(t_list **p_head, t_sound *sound);
 
 #endif /* MAIN_H */

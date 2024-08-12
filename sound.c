@@ -53,7 +53,14 @@ void	output_sound(t_sound *sound)
 {
 	while (mpg123_read(sound->mh, sound->buffer, sound->buffer_size, &sound->done) \
 			== MPG123_OK && !end_sound(sound) && !pause_sound(sound))
+	{
+		if (sound_volume_changed(sound))
+		{
+			mpg123_volume(sound->mh, sound->volume);
+			set_volume_unchanged(sound);
+		}
 		ao_play(sound->dev, (char *)sound->buffer, sound->done);
+	}
 	if (!pause_sound(sound))
 		cleanup(sound);
 }
@@ -65,6 +72,8 @@ void	*play_mp3(void *arg)
 	if (arg == NULL)
 		return (NULL);
 	sound = (t_sound *)arg;
+	if (sound->init == true)
+		return (output_sound(sound), NULL);
 	if (access(sound->filename, F_OK | R_OK) == -1)
 		return (fprintf(stderr, "%s: No such file or directory!\n", sound->filename), NULL);
 	sound->driver = ao_default_driver_id();
@@ -75,6 +84,7 @@ void	*play_mp3(void *arg)
 		return (NULL);
 	if (mpg123_volume(sound->mh, 0.1) != MPG123_OK)
 		return (perror("mpg123_volume() failure"), NULL);
+	sound->init = true;
 	output_sound(sound);
 	return (NULL);
 }

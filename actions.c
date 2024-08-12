@@ -57,7 +57,11 @@ t_list	*halt_sound(t_list **p_head, t_sound *sound)
 		tmp = tmp->next;
 	if (!tmp)
 		return (fprintf(stderr, "Sound does not exist!"), NULL);
+	if (pause_sound(tmp->sound))
+		return (fprintf(stderr, "Sound is already paused!"), NULL);
 	set_sound_pause(sound);
+	if (pthread_join(sound->thread, NULL) != 0)
+		return (perror("pthread_join() error"), NULL);
 }
 
 t_list	*resume_sound(t_list **p_head, t_sound *sound)
@@ -71,6 +75,23 @@ t_list	*resume_sound(t_list **p_head, t_sound *sound)
 		tmp = tmp->next;
 	if (!tmp)
 		return (fprintf(stderr, "Sound does not exist!"), NULL);
+	if (!pause_sound(tmp->sound))
+		return (fprintf(stderr, "Sound is not paused!"), NULL);
 	set_sound_resume(sound);
-	output_sound(sound);
+	if (pthread_create(&sound->thread, NULL, play_mp3, (void *)sound) != 0)
+		return (perror("pthread_create() error"), free(sound), NULL);
+}
+
+t_list	*change_sound(t_list **p_head, t_sound *sound)
+{
+	t_list	*tmp;
+
+	if (!p_head || !sound)
+		return (NULL);
+	tmp = *p_head;
+	while (tmp && tmp->sound != sound)
+		tmp = tmp->next;
+	if (!tmp)
+		return (fprintf(stderr, "Sound does not exist!"), NULL);
+	set_volume_changed(sound);
 }

@@ -53,3 +53,45 @@ bool	set_sound_resume(t_sound *sound)
 		return (perror("pthread_mutex_unlock() error"), true);
 	return (false);
 }
+
+bool	sound_volume_changed(t_sound *sound)
+{
+	bool	changed;
+
+	if (pthread_mutex_lock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_lock() error"), true);
+	changed = sound->volume_changed;
+	if (pthread_mutex_unlock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_unlock() error"), true);
+	return (changed);
+}
+
+bool	set_volume_changed(t_sound *sound)
+{
+	if (pthread_mutex_lock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_lock() error"), true);
+	sound->volume_changed = true;
+	if (pthread_mutex_unlock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_unlock() error"), true);
+	return (false);
+}
+
+bool	set_volume_unchanged(t_sound *sound)
+{
+	if (pthread_mutex_lock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_lock() error"), true);
+	sound->volume_changed = false;
+	if (pthread_mutex_unlock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_unlock() error"), true);
+	return (false);
+}
+
+bool	set_volume_value(t_sound *sound, double value)
+{
+	if (pthread_mutex_lock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_lock() error"), true);
+	sound->volume = value;
+	if (pthread_mutex_unlock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_unlock() error"), true);
+	return (false);
+}
