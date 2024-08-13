@@ -5,10 +5,10 @@ This project is a simple audio player implemented in C, providing both synchrono
 
 ```c
 {
-  play_sync("sound.mp3");
+  play_sync("sound.mp3", 100);
   printf("This is printed after sound.mp3 is done\n");
 
-  play_async("sound2.mp3");
+  play_async("sound2.mp3", 50.5);
   printf("This is printed while sound2.mp3 is playing\n");
 }
 ```
@@ -36,8 +36,10 @@ void destroy_ao();
 
 ### Playback Functions
 ```c
-int play_sync(const char *filename);
-t_sound *play_async(const char *filename);
+int play_sync(const char *filename, double volume);
+t_sound *play_async(const char *filename, double volume);
+
+// Volume is any double between 0 and 100, values out of range are scaled back
 ```
 - `play_sync()`: Play an audio file synchronously. Returns -1 on error.
 - `play_async()`: Start asynchronous playback of an audio file. Returns a pointer to a t_sound structure or NULL on error.
@@ -52,7 +54,7 @@ t_list *running_sounds(int action, t_sound *sound);
 
 2- `RESUME`: Resume paused playback.
 
-3- `CHANGE_VOLUME`: Apply volume change (set sound->volume before calling).
+3- `CHANGE_VOLUME`: Apply volume change (set `sound->volume` before calling).
 
 4- `STOP`: Stop the playback and clean up resources
 
