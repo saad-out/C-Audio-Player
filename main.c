@@ -5,9 +5,9 @@ int main(int ac, char **av)
 	init_ao();
 	if (ac > 2)
 	{
-		if (play_sync(av[1]) == -1)
+		if (play_sync(av[1], 100) == -1)
 			fprintf(stderr, "play_sync() error");
-		t_sound *sound = play_async(av[2]);
+		t_sound *sound = play_async(av[2], 100);
 		if (!sound)
 			fprintf(stderr, "play_async() error");
 		else
@@ -21,7 +21,7 @@ int main(int ac, char **av)
 			running_sounds(RESUME, sound);
 			sleep(1);
 			printf("vol down\n");
-			sound->volume = 1.0;
+			sound->volume = 10;
 			running_sounds(CHANGE_VOLUME, sound);
 			sleep(2);
 			printf("ending...\n");

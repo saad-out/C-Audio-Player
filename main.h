@@ -49,12 +49,12 @@ struct							s_list
 
 /* Prototypes */
 void	*play_mp3(void *arg);
-t_sound	*play_async(char *filename);
-int		play_sync(char *filename);
+t_sound	*play_async(char *filename, double volume);
+int		play_sync(char *filename, double volume);
 t_list	*running_sounds(int action, t_sound *sound);
 void	init_ao(void);
 void	destroy_ao(void);
-void	init_sound(t_sound *sound, char *filename);
+void	init_sound(t_sound *sound, char *filename, double volume);
 bool	set_sound_end(t_sound *sound);
 bool	end_sound(t_sound *sound);
 bool	set_sound_pause(t_sound *sound);
@@ -70,5 +70,6 @@ bool	set_volume_changed(t_sound *sound);
 bool	sound_volume_changed(t_sound *sound);
 bool	set_volume_value(t_sound *sound, double value);
 t_list	*change_sound(t_list **p_head, t_sound *sound);
+double scale_volume(double volume);
 
 #endif /* MAIN_H */

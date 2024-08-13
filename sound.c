@@ -56,7 +56,7 @@ void	output_sound(t_sound *sound)
 	{
 		if (sound_volume_changed(sound))
 		{
-			mpg123_volume(sound->mh, sound->volume);
+			mpg123_volume(sound->mh, scale_volume(sound->volume));
 			set_volume_unchanged(sound);
 		}
 		ao_play(sound->dev, (char *)sound->buffer, sound->done);
@@ -82,7 +82,7 @@ void	*play_mp3(void *arg)
 		return (NULL);
 	if (open_out_device(&sound->mh, sound->filename, &sound->dev, sound->driver) != MPG123_OK)
 		return (NULL);
-	if (mpg123_volume(sound->mh, 0.1) != MPG123_OK)
+	if (mpg123_volume(sound->mh, scale_volume(sound->volume)) != MPG123_OK)
 		return (perror("mpg123_volume() failure"), NULL);
 	sound->init = true;
 	output_sound(sound);

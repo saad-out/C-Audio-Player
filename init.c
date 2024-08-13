@@ -10,12 +10,12 @@ void	destroy_ao(void)
 	ao_shutdown();
 }
 
-void	init_sound(t_sound *sound, char *filename)
+void	init_sound(t_sound *sound, char *filename, double volume)
 {
 	if (sound)
 	{
 		sound->filename = filename;
-		sound->volume = 1.0;
+		sound->volume = volume;
 		sound->thread = 0;
 		sound->end = false;
 		sound->pause = false;
