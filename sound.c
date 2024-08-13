@@ -1,4 +1,4 @@
-#include "main.h"
+#include "internal.h"
 
 unsigned char	*init_mpg123(mpg123_handle **mh, size_t *buffer_size)
 {

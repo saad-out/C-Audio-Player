@@ -1,4 +1,11 @@
-#include "main.h"
+#include "internal.h"
+
+t_list	**get_sound_list(void)
+{
+	static t_list	*head = NULL;
+
+	return (&head);
+}
 
 double scale_volume(double volume)
 {

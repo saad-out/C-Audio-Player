@@ -1,14 +1,4 @@
-#include "main.h"
-
-void	init_ao(void)
-{
-	ao_initialize();
-}
-
-void	destroy_ao(void)
-{
-	ao_shutdown();
-}
+#include "internal.h"
 
 void	init_sound(t_sound *sound, char *filename, double volume)
 {
