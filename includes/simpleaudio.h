@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-# define MAIN_H
+#ifndef SIMPLE_AUDIO_H
+# define SIMPLE_AUDIO_H
 
 /*   Includes   */
 # include <stdio.h>
@@ -26,4 +26,4 @@ int		set_volume_value(t_sound *sound, double value);
 void	init_ao(void);
 void	destroy_ao(void);
 
-#endif /* MAIN_H */
+#endif /* SIMPLE_AUDIO_H */

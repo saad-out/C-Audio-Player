@@ -1,4 +1,4 @@
-#include "main.h"
+#include "../includes/simpleaudio.h"
 
 int main(int ac, char **av)
 {

@@ -7,7 +7,7 @@
 # include <mpg123.h>
 # include <pthread.h>
 # include <math.h>
-# include "main.h"
+# include "../includes/simpleaudio.h"
 
 /*   Typedefs   */
 typedef struct s_list	t_list;
