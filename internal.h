@@ -9,6 +9,9 @@
 # include <math.h>
 # include "main.h"
 
+/*   Typedefs   */
+typedef struct s_list	t_list;
+
 /*   Structs   */
 struct							s_sound
 {

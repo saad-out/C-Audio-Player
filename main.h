@@ -8,7 +8,6 @@
 
 /* Typedef */
 typedef struct s_sound	t_sound;
-typedef struct s_list	t_list;
 typedef enum e_action	t_action;
 
 /* Enums */
