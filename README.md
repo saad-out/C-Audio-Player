@@ -1,4 +1,9 @@
-# C-Audio-Player
+# <p align="center">C-Audio-Player</p>
+
+<p align="center">
+  <img src="https://github.com/saad-out/C-Audio-Player/blob/main/images/audio-bg.png" style="width:300px;"/>
+</p>
+
 ## Project Overview
 
 This project is a simple audio player implemented in C, providing both synchronous and asynchronous playback capabilities. It offers basic controls for audio playback, including play, pause, resume, volume control, and stop functionality.
@@ -45,24 +50,27 @@ t_sound *play_async(const char *filename, double volume);
 
 // Volume is any double between 0 and 100, values out of range are scaled back
 ```
-- `play_sync()`: Play an audio file synchronously. Returns -1 on error.
-- `play_async()`: Start asynchronous playback of an audio file. Returns a pointer to a `t_sound` structure or NULL on error.
+- `play_sync()`: Play an audio file synchronously. Returns `-1` on error.
+- `play_async()`: Start asynchronous playback of an audio file. Returns a pointer to a `t_sound` structure or `NULL` on error.
 
 ### Playback Control
 ```c
-t_list *running_sounds(int action, t_sound *sound);
+int   running_sounds(t_action action, t_sound *sound);
 ```
-- `running_sounds()`: Control playback of a sound. The action parameter can be one of the following macros (returns `NULL` on error):
+- `running_sounds()`: Control playback of a sound. The `action` parameter can be one of the following (returns `-1` on error):
 
 1- `PAUSE`: Pause the playback.
 
 2- `RESUME`: Resume paused playback.
 
-3- `CHANGE_VOLUME`: Apply volume change (set `sound->volume` before calling).
+3- `STOP`: Stop the playback and clean up resources
 
-4- `STOP`: Stop the playback and clean up resources
+```c
+int		set_volume_value(t_sound *sound, double value);
+```
+- `set_volume_value()`: Sets the sound's volume. `value` should be `0 <= value <= 100`.
 
-## Usage example
+## Examples
 ```c
 // You should always call these two functions ONCE to initialize
 // and destroy output resources at the beginning and end of your
@@ -113,23 +121,59 @@ int main(int ac, char **av)
     printf("error");
 
   // Pause
-  if (running_sounds(PAUSE, sound) == NULL)
+  if (running_sounds(PAUSE, sound) == -1)
     printf("error");
 
   // Resume
-  if (running_sounds(RESUME, sound) == NULL)
+  if (running_sounds(RESUME, sound) == -1)
     printf("error");
 
-  // Change volume
-  sound->volume = 10;
-  if (running_sounds(CHANGE_VOLUME, sound) == NULL)
+  // Change volume to 25%
+  if (set_volume_value(sound, 25) == -1)
     printf("error");
 
   // Stop
-  if (running_sounds(STOP, sound) == NULL)
+  if (running_sounds(STOP, sound) == -1)
     printf("error");
 
   destory_ao();
 }
 ```
-# ...
+
+## How to use
+
+First, you need to install two dependencies that the library needs:
+```bash
+sudo apt-get install libao-dev libmpg123-dev
+```
+
+### Clone repo
+Then clone this repo locally:
+```bash
+git clone https://github.com/saad-out/C-Audio-Player
+cd C-Audio-Player
+```
+
+### Building the library
+Once you've cloned the repository, you can build the library using the provided Makefile:
+```bash
+make
+```
+This command will compile the source files and generate static `libsimpleaudio.a` library in the `lib/` directory.
+
+### Linking with your program
+To use the library in your own program, you need to include the header file and link against the library.
+
+1- Copy the `include/simpleaudio.h` header file to your project directory or add the `include/` directory to your include path.
+2- Copy the `lib/libsimpleaudio.a` file to your project directory or a directory in your library path.
+3- In your C file, include the header:
+```c
+#include "simpleaudio.h"
+```
+
+4-Compile your program, linking it with the Simple Audio Player library. Here's an example compilation command:
+```bash
+gcc -o your_program your_program.c -L. -lsimpleaudio -lmpg123 -lao -lpthread -lm
+```
+Make sure to replace your_program and your_program.c with your actual program name and source file.
+Note: The `-lmpg123 -lao -lpthread -lm` flags are necessary because our lib depends on these libraries. Make sure you have them installed on your system.
