@@ -28,6 +28,7 @@ This project is a simple audio player implemented in C, providing both synchrono
 - Pause and resume functionality
 - Volume control
 - Ability to stop playback
+- Monitor playback state
 
 ## API Documentation
 
@@ -63,12 +64,29 @@ int   running_sounds(t_action action, t_sound *sound);
 
 2- `RESUME`: Resume paused playback.
 
-3- `STOP`: Stop the playback and clean up resources
+3- `STOP`: Stop the playback and clean up resources.
+
+(**IMPORTANT: After `STOP`ing a sound, the matching `t_sound` instance is completely destroyed. Any usage of the variable after this will result in an undefined behavior**)
+
 
 ```c
-int		set_volume_value(t_sound *sound, double value);
+int	set_volume_value(t_sound *sound, double value);
 ```
 - `set_volume_value()`: Sets the sound's volume. `value` should be `0 <= value <= 100`.
+
+### Monitor playback state
+```c
+t_state	get_state(t_sound *sound);
+```
+- `get_state()`: Returns the state of a sound. The `t_state` return type is one of the following:
+
+1- `PLAYING`: Currently playing.
+
+2- `PAUSED`: Currently paused.
+
+3- `END`: Playback has ended.
+
+4- `ERROR`: Error occured while checking state.
 
 ## Examples
 ```c
@@ -143,7 +161,7 @@ int main(int ac, char **av)
 }
 ```
 
-We'll add some `sleep()` functions to observe sound's changes, and use an audio from the `sounds/` sample folder. Our full program would be:
+We'll add some `sleep()` functions to observe sound's changes. Our full program would be:
 ```c
 #include "simpleaudio.h"
 #include <stdio.h>
@@ -183,6 +201,19 @@ int main(int ac, char **av)
   sleep(1);
 
   destroy_ao();
+}
+```
+
+Lastly, you can wait for an async playback to end, like this: 
+```c
+{
+  // ...
+
+  // wait for playback to end
+  while (get_state(sound) != END)
+    usleep(1000); // adjustable
+ 
+  // ...
 }
 ```
 
