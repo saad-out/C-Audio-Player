@@ -62,7 +62,10 @@ void	output_sound(t_sound *sound)
 		ao_play(sound->dev, (char *)sound->buffer, sound->done);
 	}
 	if (!pause_sound(sound))
+	{
 		cleanup(sound);
+		set_sound_end(sound);
+	}
 }
 
 void	*play_mp3(void *arg)

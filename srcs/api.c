@@ -65,3 +65,15 @@ int	set_volume_value(t_sound *sound, double value)
 		return (-1);
 	return (0);
 }
+
+t_state	get_state(t_sound *sound)
+{
+	t_state	state;
+
+	if (pthread_mutex_lock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_lock() error"), ERROR);
+	state = sound->end ? END : sound->pause ? PAUSED : PLAYING;
+	if (pthread_mutex_unlock(&sound->mutex) != 0)
+		return (perror("pthread_mutex_unlock() error"), ERROR);
+	return (state);
+}
