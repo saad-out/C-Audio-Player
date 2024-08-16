@@ -72,6 +72,9 @@ int		set_volume_value(t_sound *sound, double value);
 
 ## Examples
 ```c
+// Include the header file
+#include "simpleaudio.h"
+
 // You should always call these two functions ONCE to initialize
 // and destroy output resources at the beginning and end of your
 // code respectively.
@@ -81,7 +84,7 @@ int main(int ac, char **av)
 
   // Your code goes here
 
-  destory_ao();
+  destroy_ao();
 }
 ```
 Playing an audio file synchronously with max volume, taken from the commad line arguments:
@@ -94,7 +97,7 @@ int main(int ac, char **av)
   if (ret == -1)
     printf("error\n");
 
-  destory_ao();
+  destroy_ao();
 }
 ```
 Same, but async:
@@ -107,7 +110,7 @@ int main(int ac, char **av)
   if (sound == NULL)
     printf("error");
 
-  destory_ao();
+  destroy_ao();
 }
 ```
 You can then manipulate the playing sound using the `t_sound` instance you have, you can pause, resume, change volume and stop:
@@ -136,7 +139,50 @@ int main(int ac, char **av)
   if (running_sounds(STOP, sound) == -1)
     printf("error");
 
-  destory_ao();
+  destroy_ao();
+}
+```
+
+We'll add some `sleep()` functions to observe sound's changes, and use an audio from the `sounds/` sample folder. Our full program would be:
+```c
+#include "simpleaudio.h"
+#include <stdio.h>
+
+int main(int ac, char **av)
+{
+  init_ao();
+
+  printf("Let's play audio\n");
+  t_sound  *sound = play_async(av[1], 100);
+  if (sound == NULL)
+    printf("error");
+  sleep(1);
+
+  // Pause
+  printf("Let's pause\n");
+  if (running_sounds(PAUSE, sound) == -1)
+    printf("error");
+  sleep(1);
+
+  // Resume
+  printf("Let's resume\n");
+  if (running_sounds(RESUME, sound) == -1)
+    printf("error");
+  sleep(1);
+
+  // Change volume to 25%
+  printf("Let's change volume\n");
+  if (set_volume_value(sound, 25) == -1)
+    printf("error");
+  sleep(1);
+
+  // Stop
+  printf("Let's stop\n");
+  if (running_sounds(STOP, sound) == -1)
+    printf("error");
+  sleep(1);
+
+  destroy_ao();
 }
 ```
 
@@ -165,7 +211,9 @@ This command will compile the source files and generate static `libsimpleaudio.a
 To use the library in your own program, you need to include the header file and link against the library.
 
 1- Copy the `include/simpleaudio.h` header file to your project directory or add the `include/` directory to your include path.
+
 2- Copy the `lib/libsimpleaudio.a` file to your project directory or a directory in your library path.
+
 3- In your C file, include the header:
 ```c
 #include "simpleaudio.h"
