@@ -57,5 +57,6 @@ bool	set_volume_changed(t_sound *sound);
 bool	sound_volume_changed(t_sound *sound);
 double scale_volume(double volume);
 t_list	**get_sound_list(void);
+void	clear_sound_list(void);
 
 #endif /* INTERNAL_H */

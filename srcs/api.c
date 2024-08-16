@@ -7,6 +7,7 @@ void	init_ao(void)
 
 void	destroy_ao(void)
 {
+	clear_sound_list();
 	ao_shutdown();
 }
 
