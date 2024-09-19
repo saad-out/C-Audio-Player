@@ -219,26 +219,28 @@ Lastly, you can wait for an async playback to end, like this:
 
 ## How to use
 
+### Install locally
+
 First, you need to install two dependencies that the library needs:
 ```bash
 sudo apt-get install libao-dev libmpg123-dev
 ```
 
-### Clone repo
+#### Clone repo
 Then clone this repo locally:
 ```bash
 git clone https://github.com/saad-out/C-Audio-Player
 cd C-Audio-Player
 ```
 
-### Building the library
+#### Building the library
 Once you've cloned the repository, you can build the library using the provided Makefile:
 ```bash
 make
 ```
 This command will compile the source files and generate static `libsimpleaudio.a` library in the `lib/` directory.
 
-### Linking with your program
+#### Linking with your program
 To use the library in your own program, you need to include the header file and link against the library.
 
 1- Copy the `include/simpleaudio.h` header file to your project directory or add the `include/` directory to your include path.
@@ -256,3 +258,55 @@ gcc -o your_program your_program.c -L. -lsimpleaudio -lmpg123 -lao -lpthread -lm
 ```
 Make sure to replace your_program and your_program.c with your actual program name and source file.
 Note: The `-lmpg123 -lao -lpthread -lm` flags are necessary because our lib depends on these libraries. Make sure you have them installed on your system.
+
+
+### Docker image
+
+This Docker image contains the Simple Audio Player library, allowing you to easily compile and run C programs that use this library.
+
+#### Pulling the Image
+To pull the image from Docker Hub, use the following command (you might need to use `sudo`):
+
+```bash
+docker pull saadout/simple-audio-player:latest
+```
+
+#### Using the Image
+
+1- Create a C file that includes the Simple Audio Player library. For example, program.c:
+```c
+#include <simpleaudio.h>
+#include <stdio.h>
+
+int main() {
+    printf("Simple Audio Player library is successfully included!\n");
+    return 0;
+}
+```
+
+2- Run a container from the image, mounting your current directory:
+```bash
+docker run -it --rm -v $(pwd):/app saadout/simple-audio-player
+```
+
+3- Inside the container, compile your program:
+```bash
+gcc -o program program.c -lsimpleaudio -lmpg123 -lao -lpthread -lm
+```
+
+4- Run your program:
+```bash
+./program
+```
+
+#### Automating Compilation and Execution
+
+You can use the following command to compile and run your program in one step:
+```bash
+docker run -it --rm -v $(pwd):/app saadout/simple-audio-player sh -c "gcc -o /app/program /app/program.c -lsimpleaudio -lmpg123 -lao -lpthread -lm && /app/program"
+```
+Replace `program.c` and `program` with your actual file names if different.
+
+### Note
+This image is based on Ubuntu and includes all necessary dependencies to compile and run programs using the Simple Audio Player library.
+
